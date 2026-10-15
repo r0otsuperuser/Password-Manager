@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "PwManager Autofill",
+  "version": "1.0",
+  "description": "Extension that autofills credentials from PwManager.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "alarms",
+    "nativeMessaging"
+  ]
+}

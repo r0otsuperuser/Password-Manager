@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { width: 240px; padding: 10px; font-family: sans-serif; text-align: center; }
+    input { width: 100%; padding: 6px; box-sizing: border-box; margin-bottom: 8px; }
+    button { padding: 8px 12px; cursor: pointer; background: #4C3CDE; color: white; border: none; border-radius: 4px; width: 100%; }
+    #status { margin-top: 8px; font-size: 12px; min-height: 14px; }
+    #lockedBadge { font-size: 11px; color: #888; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h3>Autofill</h3>
+  <div id="lockedBadge"></div>
+
+  <div id="unlockForm">
+    <input id="masterPassword" type="password" placeholder="Master password" autocomplete="off">
+  </div>
+
+  <button id="send">Fill Credentials</button>
+  <div id="status"></div>
+
+  <script src="front.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "com.pwmanager.autofill",
+  "description": "Password Manager Native Host",
+  "path": "/ABSOLUTE/PATH/TO/PwManager/pwmanager_native_host.sh",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://YOUR_EXTENSION_ID_HERE/"
+  ]
+}

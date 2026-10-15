@@ -1,0 +1,14 @@
+# Never commit a vault, even with test data
+vault.db
+vault.db-journal
+*.db
+
+# Build output
+pwmanager
+*.o
+
+# Extension private key (the public key lives in manifest.json)
+*.pem
+
+# Packed extension
+*.crx
