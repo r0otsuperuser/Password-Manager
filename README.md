@@ -10,7 +10,7 @@ The vault is a single SQLite file (`vault.db`) encrypted with [libsodium](https:
 
 **Command line**
 
-![CLI demo](docs/demo-cli.gif)
+![CLI demo](docs/demo.gif)
 
 **Browser autofill**
 
