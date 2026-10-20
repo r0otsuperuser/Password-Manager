@@ -1,9 +1,20 @@
 # PwManager
+
 ![CI](https://github.com/r0otsuperuser/Password-Manager/actions/workflows/ci.yml/badge.svg)
 
 > A local, libsodium-encrypted password manager in C with a Chrome autofill extension, built to make strong, unique passwords practical and to keep them off the screen.
 
 The vault is a single SQLite file (`vault.db`) encrypted with [libsodium](https://doc.libsodium.org/). There is no server, no online account and no cloud sync: the file stays with the user, who decides where to keep it.
+
+## Demo
+
+**Command line**
+
+![CLI demo](docs/demo-cli.gif)
+
+**Browser autofill**
+
+![Autofill demo](docs/demo-autofill.gif)
 
 ## Why this project?
 
@@ -64,6 +75,8 @@ It also treats **shoulder surfing** as part of the threat model: every password 
 | `Extension/front.js` / `Extension/popup.html` | Popup: unlocking and triggering autofill |
 | `Extension/options.js` / `Extension/options.html` | Settings page where the extension token is saved |
 | `com.pwmanager.autofill.json` | Native messaging host manifest (registers the executable with Chrome) |
+| `tests/test_backend.c` | Unit tests for the parsing helpers in `backend.c` |
+| `.github/workflows/ci.yml` | GitHub Actions workflow: builds the project and runs the tests |
 | `pwmanager_native_host.sh` | Script Chrome runs to start `./pwmanager native` in the vault folder |
 
 ### Database schema
@@ -108,6 +121,7 @@ sudo apt install build-essential libsodium-dev libsqlite3-dev xclip
 |---|---|---|
 | Parrot OS (Home) + Brave installed via `apt` | Working | All CLI commands and the extension autofill flow tested manually, in daily use |
 | Brave installed via `snap` | Not working | The Native Messaging host could not be started |
+| GitHub Actions (`ubuntu-latest`) | Working | Build and unit tests run on every push (see [Testing](#testing)) |
 | Chrome, Chromium, Flatpak builds | Not tested | |
 
 ---
@@ -125,6 +139,18 @@ gcc -Wall -Wextra -O2 main.c backend.c -o pwmanager -lsodium -lsqlite3
 ```
 
 > Never commit your `vault.db`. The provided `.gitignore` already excludes it.
+
+---
+
+## Testing
+
+```bash
+make test
+```
+
+Runs unit tests for the parsing helpers in `backend.c` (`domain_extract`, `json_extract` and `json_escape`). They are built with AddressSanitizer and UndefinedBehaviorSanitizer, so a memory error fails the run. The same command runs in GitHub Actions on every push and pull request.
+
+The tests cover escape handling, malformed input, buffer limits and an escape/extract round trip. They do not yet cover the vault and cryptography code in `main.c`, or the full native host session.
 
 ---
 
@@ -168,13 +194,12 @@ Choose a master password. When it finishes, the program prints a **64-character 
    # the extension ID derived from that public key
    openssl dgst -sha256 -binary key.der | head -c 16 | od -An -tx1 | tr -d ' \n' | tr '0-9a-f' 'a-p'
    ```
-2. Add the base64 output to `Extension/manifest.json` as a `key` field:
+2. Add the base64 output to `Extension/manifest.json` as a `key` field, keeping the other fields as they are:
    ```json
    {
      "manifest_version": 3,
      "name": "PwManager Autofill",
-     "key": "<BASE64_PUBLIC_KEY>",
-     ...
+     "key": "<BASE64_PUBLIC_KEY>"
    }
    ```
 3. Open `chrome://extensions`, enable **Developer mode** and click **Load unpacked**, selecting the `Extension/` folder. Confirm that the ID shown by Chrome matches the one computed in step 1.
@@ -243,6 +268,8 @@ This was a design choice based on the threat model:
 
 **Consequence to keep in mind:** anyone who obtains `vault.db` **and** the master password can open the vault. The file's security depends on where the user keeps it (disk encryption, OS permissions, protected backups) and on the quality of the chosen password. Adding an extra factor remains a possible future improvement.
 
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
 ---
 
 ## Known limitations
@@ -269,7 +296,7 @@ This was a design choice based on the threat model:
 - Credential import and export
 - **Account picker**: when a site has multiple accounts, show the user a list in the popup and fill the one they select
 - Subdomain matching
-- Automated tests and fuzzing of the message parser
+- Fuzzing of the message parser and tests for the cryptography code in `main.c`
 - Firefox support
 
 ---
