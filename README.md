@@ -1,4 +1,5 @@
 # PwManager
+![CI](https://github.com/r0otsuperuser/Password-Manager/actions/workflows/ci.yml/badge.svg)
 
 > A local, libsodium-encrypted password manager in C with a Chrome autofill extension, built to make strong, unique passwords practical and to keep them off the screen.
 
