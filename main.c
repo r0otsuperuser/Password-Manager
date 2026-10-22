@@ -1169,7 +1169,7 @@ int main(int argc, char* argv[]) {
             generate_password((int)value);
 
         } else {
-            printf("\nUsage: ./pwmanager ger <length>\n");
+            printf("\nUsage: ./pwmanager gen <length>\n");
             return 1;
         }
         
